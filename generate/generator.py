@@ -8,10 +8,10 @@ from autoClangFormat import make_clang_format
 decoder_tree_header = """
 #define assign(left, right) decodedInstr.left = right ;
 
-#define useRS1 assign(rs1, RS1)
-#define useRS2 assign(rs2, RS2)
-#define useRD assign(rd, RD)
-#define useCSR assign(csr, CSR)
+#define useR1 assign(rs1, R1)
+#define useR2 assign(rs2, R2)
+#define useR3_IMM assign(rd, R3_IMM)
+
 #define setExec(_set_exec_func) assign(exec, _set_exec_func)
 
 using ISA::bitsFrom;
@@ -34,7 +34,7 @@ class Generator:
         self.enum = []
 
         self.handler = tmph.YamlHandler()
-        self.handler.get_impl_set(['generate/isa/execDecodeRvZicsr.isa.yaml', 'generate/isa/execDecode.isa.yaml', 'generate/isa/m.isa.yaml'])
+        self.handler.get_impl_set(['generate/isa/execDecode.isa.yaml'])
         self.impl_instr = self.handler.get_impl_names()
 
 
