@@ -35,15 +35,14 @@ namespace simlinx {
 
     constexpr void load(size_type addr, std::unsigned_integral auto &value) {
       for (auto i = 0uz; i < sizeof(value); ++i) {
-        value |=
-            static_cast<std::decay_t<decltype(value)>>(raw_ram.at(addr + i))
-            << 8 * i;
+        value |= static_cast<std::decay_t<decltype(value)>>(raw_ram[addr + i])
+                 << 8 * i;
       }
     }
 
     constexpr void store(size_type addr, std::unsigned_integral auto value) {
       for (auto i = 0uz; i < sizeof(value); ++i) {
-        raw_ram.at(addr + i) = 0xFF & value;
+        raw_ram[addr + i] = 0xFF & value;
         value >>= 8;
       }
     }
@@ -51,7 +50,7 @@ namespace simlinx {
     constexpr byte &operator[](size_type addr) { return raw_ram[addr]; }
 
     constexpr byte operator[](size_type addr) const {
-      return const_cast<const RAM *>(this)->operator[](addr);
+      return const_cast<RAM *>(this)->operator[](addr);
     }
   };
 } // namespace simlinx

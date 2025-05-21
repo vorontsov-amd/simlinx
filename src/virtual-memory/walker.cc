@@ -15,6 +15,9 @@ namespace simlinx {
     uint64_t shift;
     uint64_t pte;
 
+    std::cout << "Page walker: translating va " << std::hex << va << " "
+              << std::bitset<64>(va) << std::endl;
+
     while (1) {
       switch (i) {
       case (2):
@@ -27,30 +30,61 @@ namespace simlinx {
         shift = 12;
         break;
       }
+      std::cout << "level: " << i << std::endl;
+      std::cout << "Prev PTEAddr: " << std::hex << a << " "
+                << std::bitset<64>(a) << std::endl
+                << "gap in block " << std::hex
+                << ((va >> shift) & ((1U << 9) - 1)) << " "
+                << std::bitset<64>(((va >> shift) & ((1U << 9) - 1)))
+                << std::endl
+                << "PTEAddr " << std::hex
+                << a + ((va >> shift) & ((1U << 9) - 1)) * PTESize << " "
+                << std::bitset<64>(a +
+                                   ((va >> shift) & ((1U << 9) - 1)) * PTESize)
+                << std::endl;
 
       PTEAddr = a + ((va >> shift) & ((1U << 9) - 1)) * PTESize;
-      // !!!! pte = core.mem.raw_load<uint64_t>(PTEAddr);
+      pte = core.load_physical<uint64_t>(PTEAddr);
 
-      if ((pte & vbit) == 0)
+      std::cout << "pte " << std::hex << pte << " " << std::bitset<64>(pte)
+                << std::endl
+                << "(pte >> 10) " << std::hex << (pte >> 10) << " "
+                << std::bitset<64>((pte >> 10)) << std::endl
+                << "(pte >> 10) * pageSize" << std::hex
+                << (pte >> 10) * pageSize << " "
+                << std::bitset<64>((pte >> 10) * pageSize) << std::endl;
+
+      if ((pte & vbit) == 0) {
+        std::cout << "PageFault::InvalidPage" << std::endl;
         return PageFault::InvalidPage;
+      }
 
-      if (((pte & rbit) == 0) && ((pte & wbit) == wbit))
+      if (((pte & rbit) == 0) && ((pte & wbit) == wbit)) {
+        std::cout << "PageFault::WButNotR" << std::endl;
         return PageFault::WButNotR;
+      }
 
-      if (((pte & rbit) == rbit) || ((pte & xbit) == xbit))
+      if (((pte & rbit) == rbit) || ((pte & xbit) == xbit)) {
         break;
+      }
 
       i = i - 1;
-      if (i < 0)
+      if (i < 0) {
+        std::cout << "PageFault::ILessThenZero" << std::endl;
         return PageFault::ILessThenZero;
+      }
 
       a = (pte >> 10) * pageSize;
+      std::cout << "a: " << std::hex << a << std::endl;
+      std::cout << "---------------------------------" << std::endl;
     }
 
     if ((mode == MemoryMode::READ && (pte & rbit) == 0) ||
         (mode == MemoryMode::WRITE && (pte & wbit) == 0) ||
-        (mode == MemoryMode::EXEC && (pte & xbit) == 0))
+        (mode == MemoryMode::EXEC && (pte & xbit) == 0)) {
+      std::cout << "PageFault::AccessType" << std::endl;
       return PageFault::AccessType;
+    }
 
     // if((i > 0) && (((pte >> 10) & 0x3ff) != 0))
     // return PageFault::SuperPage;
@@ -61,6 +95,7 @@ namespace simlinx {
     if ((mode == MemoryMode::WRITE) && ((pte & dbit) == 0))
       return PageFault::DirtyBit;
 
+    std::cout << "pte: " << std::hex << pte << std::endl;
     *pa = ((pte << 2) & ~((1U << 12) - 1)) | (va & ((1U << 12) - 1));
     // if(i > 0)
     // {
@@ -75,6 +110,9 @@ namespace simlinx {
       mmu.tlbW.insert(va, *pa);
     if ((pte & xbit) == xbit)
       mmu.tlbX.insert(va, *pa);
+
+    std::cout << "Walker:: Translated va:" << std::hex << va << " to pa:" << *pa
+              << std::endl;
     return PageFault::NoFault;
   }
 

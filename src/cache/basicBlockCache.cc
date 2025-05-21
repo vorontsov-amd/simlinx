@@ -1,21 +1,16 @@
 #include "cache/basicBlockCache.hh"
 #include "cpu/core.hh"
-#include "xbyak/xbyak.h"
 
 namespace simlinx {
-  BasicBlock<> *BasicBlockCache::createNewBlock(Core &core, X86JitCompiller& jit) {
+  BasicBlock<> *BasicBlockCache::createNewBlock(Core &core) {
     // std::cout << "created new block" << std::endl;
-    insert(BasicBlock<>(core, core.pc_reg, jit), core.pc_reg);
+    insert(BasicBlock<>(core, core.pc_reg), core.pc_reg);
     // dump();
-    // std::cout << "Dump:\n";
-    // jit.gen.dump();
-    // std::cout << "Dump end\n";
-    jit.gen.reset();
     // std::cout << "--created new block--" << std::endl;
     return getLastInserted();
   }
-  BasicBlock<> *BasicBlockCache::createNewBlock(Core &core, uint64_t pc, X86JitCompiller& jit) {
-    insert(BasicBlock<>(core, pc, jit), pc);
+  BasicBlock<> *BasicBlockCache::createNewBlock(Core &core, uint64_t pc) {
+    insert(BasicBlock<>(core, pc), pc);
     return getLastInserted();
   }
 } // namespace simlinx

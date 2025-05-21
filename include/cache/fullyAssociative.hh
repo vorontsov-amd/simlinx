@@ -6,7 +6,7 @@
 #include <stack>
 #include <unordered_map>
 
-template <typename StorageT, uint64_t Size = 32, typename KeyT = uint64_t,
+template <typename StorageT, uint64_t Size = 40, typename KeyT = uint64_t,
           uint64_t Alignas = 64>
 class FullyAssociativeCache : public Statistic {
 private:

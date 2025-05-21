@@ -3,6 +3,7 @@ from generate.syscall.sysParser import parse_linux_syscalls, parse_yaml
 from termcolor import colored
 import os
 import subprocess
+import re
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
 
@@ -22,8 +23,8 @@ def runcmd(cmd, verbose = False, *args, **kwargs):
 def find_simlinx_dir():
     path = os.getcwd()
     if 'simlinx' in path:
-        path = path.split('simlinx')[0]
-        path += 'simlinx/'
+        match = re.match(r"(.*simlinx)\s*(.*)", path)
+        path = match.group(1) + '/'
     else:
         print(colored('simlinx directory not found', 'red'))
         exit()
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
             Core& core) {
             {{ syscall.do | indent(4) }}
-                return Fault::NO_FAULT;
+                return Fault::NoFault;
             }
             {% endfor %}
 

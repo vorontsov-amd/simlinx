@@ -34,8 +34,7 @@ execute_cc_tmpl = Template("""
     {% endfor %}
                            
     void executeEbbc(simlinx::Core &core, BasedInstruction* bbsI, BasedInstruction* curI) {
-      std::cout << __PRETTY_FUNCTION__ << std::endl;
-      core.dump();
+      {#std::cout << __PRETTY_FUNCTION__ << std::endl;#}
       core.pc_reg += (curI-bbsI)*sizeof(uint32_t);
       core.executedI += (curI-bbsI);
     }
@@ -85,10 +84,13 @@ extern std::array<const char *, {{ implInstrSet|length + 2 }}> InstrNames;
 
 decoder_block_tmpl = Template(
 """{{' '*tab}}decodedInstr.matchBitsId(decodedBits, InstrId::{{ instr_id }});
-{{' '*tab}}{{ decode | indent(tab)}}
-decodedInstr.exec = {{'execute'+instr_id[0].upper()+instr_id[1:].lower()}};
-{% if isEBB %} decodedInstr.setEBB();{% endif %}
-{{JIT}}
+// assignements
+{{' '*tab}}{{ decode | indent(tab)}} // end assignments
+
+// metainformation
+setExec({{'execute'+instr_id[0].upper()+instr_id[1:].lower()}});
+{% if isEBB %} decodedInstr.setEBB();{% endif %} //end metainformation
+
 """)
 
 bitfields_hh_tmpl = Template("""

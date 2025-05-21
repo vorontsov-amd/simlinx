@@ -16,8 +16,8 @@
       printf("sys_exit [ \033[31m %ld \033[0m ]\n", core.regs[simlinx::Register::a0]);
     else
       // green
-      printf("sys_exit [ \033[32m %ld \033[0m ]\n", core.regs[simlinx::Register::a0]);
-    return Fault::THE_END_OF_TASK;
+      printf("sys_exit [ \033[32m %ld \033[0m ]\n", core.regs[Core::Register::a0]);
+    return Fault::TheEndOfTask;
 
 - name: not_implemented_syscall
   args: []

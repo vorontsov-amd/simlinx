@@ -1,17 +1,17 @@
 - instruction: mul
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     core.regs[rd] = core.regs[rs1] * core.regs[rs2];
 
 
 - instruction: mulh
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     core.regs[rd] = (uint64_t)
                             (
@@ -24,9 +24,9 @@
 
 - instruction: mulhsu
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     core.regs[rd] = (uint64_t)
                             (
@@ -39,9 +39,9 @@
 
 - instruction: mulhu
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     core.regs[rd] = (uint64_t)
                             (
@@ -54,9 +54,9 @@
 
 - instruction: div
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = (uint64_t)-1LL;
@@ -68,9 +68,9 @@
 
 - instruction: divu
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = (uint64_t)-1LL;
@@ -80,9 +80,9 @@
 
 - instruction: rem
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = core.regs[rs1];
@@ -94,9 +94,9 @@
 
 - instruction: remu
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = core.regs[rs1];
@@ -106,18 +106,18 @@
 
 - instruction: mulw
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     core.regs[rd] = sext<64,32>(core.regs[rs1] * core.regs[rs2]);
 
 
 - instruction: divw
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = (uint64_t)-1LL;
@@ -129,9 +129,9 @@
 
 - instruction: divuw
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     if (core.regs[rs2] == 0ULL) {
       core.regs[rd] = (uint64_t)-1LL;
@@ -142,9 +142,9 @@
 
 - instruction: remw
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     reg_t src1 = bitsFrom(core.regs[rs1], 31, 0);
     reg_t src2 = bitsFrom(core.regs[rs2], 31, 0);
@@ -158,9 +158,9 @@
 
 - instruction: remuw
   decode: |
-    decodedInstr.rs2 = RS2;
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
+    useRS2;
+    useRS1;
+    useRD;
   execute: |
     reg_t src1 = bitsFrom(core.regs[rs1], 31, 0);
     reg_t src2 = bitsFrom(core.regs[rs2], 31, 0);

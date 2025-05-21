@@ -1,16 +1,15 @@
 - instruction: csrrw 
   decode: |
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    useRS1;
+    useRD;
+    useCSR;
   execute: |
     if (core.regs[rd] == 0) {
         core.CSRs[csr] = core.regs[rs1];
         (curI + 1)->exec(core, bbsI, curI + 1);
         return;
-        //return Fault::NO_FAULT;    
+        //return Fault::NoFault;    
     }
-
     reg_t tmp = core.CSRs[csr];
     core.CSRs[csr] = core.regs[rs1];
     core.regs[rd] = tmp;
@@ -18,9 +17,9 @@
 
 - instruction: csrrs
   decode: |
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    useRS1;
+    useRD;
+    useCSR;
   execute: |
     reg_t tmp = core.CSRs[csr];
     core.CSRs[csr] = tmp | core.regs[rs1];
@@ -29,9 +28,9 @@
 
 - instruction: csrrc
   decode: |
-    decodedInstr.rs1 = RS1;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    useRS1;
+    useRD;
+    useCSR;
   execute: |
     reg_t tmp = core.CSRs[csr];
     core.CSRs[csr] = tmp & ~core.regs[rs1];
@@ -40,9 +39,9 @@
 
 - instruction: csrrwi
   decode: |
-    decodedInstr.imm = ZIMM;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    assign(imm, ZIMM);
+    useRD;
+    useCSR;
   execute: |
     /*if (isntr.rd != 0)*/
     core.regs[rd] = core.CSRs[csr];
@@ -51,9 +50,9 @@
 
 - instruction: csrrsi
   decode: |
-    decodedInstr.imm = ZIMM;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    assign(imm, ZIMM);
+    useRD;
+    useCSR;
   execute: |
     reg_t tmp = core.CSRs[csr];
     core.CSRs[csr] = tmp | imm;
@@ -62,9 +61,9 @@
 
 - instruction: csrrci
   decode: |
-    decodedInstr.imm = ZIMM;
-    decodedInstr.rd = RD;
-    decodedInstr.csr = CSR;
+    assign(imm, ZIMM);
+    useRD;
+    useCSR;
   execute: |
     reg_t tmp = core.CSRs[csr];
     core.CSRs[csr] = tmp & ~imm;

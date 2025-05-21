@@ -8,16 +8,28 @@ void InitMMU() {
   builder.ThirdLevelPtCnfg(0x10, 0x10, XO);
   builder.ThirdLevelPtCnfg(0xe1, 0xe1, RW);
   builder.ThirdLevelPtCnfg(0xe0, 0xe0, RW);
+  builder.ThirdLevelPtCnfg(0xa0, 0xa0, RW);
+  builder.ThirdLevelPtCnfg(0xb0, 0xa0, RW);
   builder.EnableTranslation();
-}
-
-int fibonacci_recursive(int n) {
-  if (n <= 1)
-    return 1;
-  return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2);
 }
 
 int main() {
   InitMMU();
-  return fibonacci_recursive(7);
+  
+  
+  int* p1 = (int*)0xa0001;
+  int* p2 = (int*)0xb0001;
+  
+  *p1 = 0;
+  *p2 = 1;
+  
+  if (*p1 != *p2) {
+     while (1)
+     {
+        /* code */
+     }
+     
+  }
+  return 0;
 }
+

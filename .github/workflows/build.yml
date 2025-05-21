@@ -1,0 +1,61 @@
+name: Build simulator
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run-binaries:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}  # Use the ref of the triggering branch
+
+      - name: Dump repo
+        run:
+          pwd; ls -R
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'  # Specify the Python version you want to use
+
+      - name: Run tests
+        run: |
+          echo "Running tests on branch: ${{ github.ref }}"
+
+      - name: Packages prepare
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install g++-14 cmake make ninja-build python3 python3-dev git python3.12-venv wget
+
+      - name: Python prepare
+        run: |
+          python3 -m venv .venv;
+          source .venv/bin/activate;
+          python -m pip install --upgrade pip;
+          pip install -r requirements.txt;
+          pip install -e .
+
+      - name: Build simlinx
+        run: |
+          source .venv/bin/activate
+          echo "Activated virtual environment"
+          pip list  # Check installed packages
+          cmake -G Ninja .  -B build  -DCMAKE_CXX_COMPILER=/usr/bin/g++-14 -DCMAKE_BUILD_TYPE=Release;
+          cmake --build build --parallel -j$(nproc)
+
+      - name: Download tests
+        run: |
+          source .venv/bin/activate;
+          python3 installTests.py
+
+      - name: Run RISC-V tests
+        run: bash run_tests.sh

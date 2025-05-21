@@ -6,7 +6,13 @@ import isaTemplateHandler as tmph
 from autoClangFormat import make_clang_format
 
 decoder_tree_header = """
-#include "jit/jitCompiller.hh"
+#define assign(left, right) decodedInstr.left = right ;
+
+#define useRS1 assign(rs1, RS1)
+#define useRS2 assign(rs2, RS2)
+#define useRD assign(rd, RD)
+#define useCSR assign(csr, CSR)
+#define setExec(_set_exec_func) assign(exec, _set_exec_func)
 
 using ISA::bitsFrom;
 void simlinx::Core::decode(uint32_t decodedBits, ISA::BasedInstruction& decodedInstr, X86JitCompiller& jit) {

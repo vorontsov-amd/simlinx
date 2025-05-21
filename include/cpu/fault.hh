@@ -1,12 +1,12 @@
 #pragma once
 
 enum class Fault {
-  NO_FAULT,
-  NOT_IMPLEMENTED,
-  ILLEGAL_INSTRUCTION,
-  LOAD_ACCESS_FAULT,
-  STORE_ACCESS_FAULT,
-  THE_END_OF_TASK
+  NoFault,
+  NotImplemented,
+  IllegalInstruction,
+  LoadAccessFault,
+  StoreAccessFault,
+  TheEndOfTask
 };
 
 enum class PageFault {

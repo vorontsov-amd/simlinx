@@ -1,4 +1,14 @@
-# simlinx
+<p align="center">
+    <img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:020024,35:090979,100:00d4ff&text=SIMLINX&fontColor=ffffff&reversal=false&section=header&textBg=false&fontAlignY=36" alt="Description of Image" />
+</p>
+
+<p align="center" style="text-align: center;">
+    <a href="https://github.com/Naminar/simlinx/actions/workflows/build.yml"><img src="https://github.com/Naminar/simlinx/actions/workflows/build.yml/badge.svg" alt="Build simulator" /></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/using-c%2B%2B23-blue" alt="C++23" /></a>
+</p>
+
+
 
 ## Manuals
 * [The RISC-V Instruction Set Manual Volume I (Unprivileged Architecture)](https://drive.google.com/file/d/1uviu1nH-tScFfgrovvFCrj7Omv8tFtkp/view)
@@ -52,4 +62,25 @@ How to compile bin files for simulation:
 ```shell
 riscv64-linux-gnu-gcc -nostdlib -march=rv64i -mabi=lp64 --static -Wl,-emain riscv-examples/src/fib.cc
 riscv64-linux-gnu-objdump -M no-aliases -M numeric -d
+```
+
+Gprof usage (use `-pg` key in cmake)
+```shell
+gprof ./build/bin/simlinx {workload}
+gprof ./build/bin/simlinx gmon.out > analysis.txt
+```
+
+## Workloads compilation 
+
+Queens workload
+```
+riscv64-linux-gnu-gcc -nostdl
+ib -fno-builtin -fno-lto -ffreestanding -march=rv64i -mabi=lp64 --static -Wl,-emain riscv-
+examples/src/queens.c -o queens
+```
+
+MMU integration test
+```
+riscv64-linux-gnu-gcc -nostdlib -fno-builtin -fno-lto -ffreestanding -march=rv64izicsr -mabi=lp64 --static -Wl,-emain riscv-examples/src/mmu.cc  page-table-
+api/sv39/sv39.cc  -I./page-table-api/sv39/ -O0 -o mmu
 ```

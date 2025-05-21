@@ -12,19 +12,19 @@ struct TLBEntry {
 };
 
 class TLB : public FullyAssociativeCache<TLBEntry> {
-  Addr constexpr offsetMask() const { return (1U << 13) - 1; }
+  Addr constexpr offsetMask() const { return ((1U << 12) - 1); }
 
 public:
   std::optional<Addr> translate(Addr va) {
-    TLBEntry *entry = lookup(va & offsetMask());
+    TLBEntry *entry = lookup(va & ~offsetMask());
     if (entry) {
-      return entry->ppn | (va & ~offsetMask());
+      return entry->ppn | (va & offsetMask());
     }
     return {};
   }
 
   void insert(Addr va, Addr pa) {
-    TLBEntry entry{va & offsetMask(), pa & offsetMask()};
-    FullyAssociativeCache::insert(entry, va & offsetMask());
+    TLBEntry entry{va & ~offsetMask(), pa & ~offsetMask()};
+    FullyAssociativeCache::insert(entry, va & ~offsetMask());
   }
 };
