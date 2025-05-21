@@ -15,8 +15,7 @@ decoder_tree_header = """
 #define setExec(_set_exec_func) assign(exec, _set_exec_func)
 
 using ISA::bitsFrom;
-void simlinx::Core::decode(uint32_t decodedBits, ISA::BasedInstruction& decodedInstr, X86JitCompiller& jit) {
-using namespace Xbyak::util;
+void simlinx::Core::decode(uint32_t decodedBits, ISA::BasedInstruction& decodedInstr) {
 """
 
 class Generator:
