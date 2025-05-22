@@ -14,10 +14,15 @@ namespace simlinx {
     // std::cout << "Creating BasicBlock" << std::endl;
     do {
       auto decodedBits = core.mem.load<uint32_t>(basicBlockPC);
+      // std::cout << "decodedBits = " << std::hex << decodedBits << std::endl;
       core.decode(decodedBits, decodingInst);
       instructions[instructionsItr] = decodingInst;
-      // std::cout << "PC: 0x" << std::hex << basicBlockPC << std::dec
-      //           << " Decoding instruction: " << decodingInst.instrId
+      
+      // std::cout << "PC: 0x" << std::hex << basicBlockPC
+      //           << " Decoding instruction: " << decodingInst.instrId + 1
+      //           << " r1: " << decodingInst.rs1 
+      //           << " r2: " << decodingInst.rs2 
+      //           << " r3_imm: " << decodingInst.imm
       //           << " EBB: " << decodingInst.isEBB() << std::endl;
       basicBlockPC += 4;
       instructionsItr++;

@@ -10,10 +10,11 @@ namespace simlinx {
 
   void Core::run(Core::reg_t pc) {
     pc_reg = pc;
-    regs[2] = 900_KB;
-    regs[0] = 0;
+    regs[1] = 900_KB;
     BasicBlock<> *bb;
     Fault fault = Fault::NoFault;
+
+    std::println("PC = {}", pc);
 
     auto start = std::chrono::high_resolution_clock::now();
     while (true && fault == Fault::NoFault && this->fault == Fault::NoFault) {
@@ -35,6 +36,12 @@ namespace simlinx {
     std::cout << "Instructions executed: " << executedI << std::endl;
     std::cout << "MIPS: " << float(executedI) / float(duration.count())
               << std::endl;
+
+
+    int i = 0;
+    for (auto reg : regs) {
+      std::cout << "reg" << i++ << " = " << std::hex << reg << std::endl;
+    }
 
     if ((fault != Fault::NoFault || this->fault != Fault::NoFault) &&
         regs[Core::Register::a0])

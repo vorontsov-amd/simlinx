@@ -18,9 +18,9 @@ decode(24-31) {
     x11: BGT
     x12: BLEU
     x13: BGTU
-    x14: SHL
+    x14: SRL
     x15: SRA
-    x16: SHR
+    x16: SHL
     x17: XOR
     x18: SUB
     x19: CLEAR

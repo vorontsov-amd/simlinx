@@ -10,7 +10,7 @@ decoder_tree_header = """
 
 #define useR1 assign(rs1, R1)
 #define useR2 assign(rs2, R2)
-#define useR3_IMM assign(rd, R3_IMM)
+#define useR3_IMM assign(imm, R3_IMM)
 
 #define setExec(_set_exec_func) assign(exec, _set_exec_func)
 

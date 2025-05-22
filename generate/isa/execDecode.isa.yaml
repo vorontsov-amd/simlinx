@@ -4,7 +4,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: movli
   decode: |
@@ -28,7 +28,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    simPutPixel(r1, r2, r3_imm);
+    simPutPixel(core.regs[r1], core.regs[r2], core.regs[r3_imm]);
 
 - instruction: b
   decode: |
@@ -36,7 +36,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.pc_reg = r3_imm;
+    core.pc_reg += sext<16>(r3_imm) * 4;
 
 - instruction: movhi
   decode: |
@@ -44,7 +44,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.regs[r1] = r3_imm << 16;
+    core.regs[r1] = sext<32>(r3_imm << 16);
 
 - instruction: ori
   decode: |
@@ -52,7 +52,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.regs[r1] = core.regs[r2] | r3_imm;
+    core.regs[r1] = sext<32>(core.regs[r2] | r3_imm);
 
 - instruction: inc_eqi
   decode: |
@@ -60,7 +60,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 
 - instruction: inc_nei
@@ -69,7 +69,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: add
   decode: |
@@ -85,7 +85,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: store
   decode: |
@@ -93,7 +93,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.store<uint32_t>(core.regs[r2] + r3_imm, core.regs[r1]);
+    core.store<uint32_t>(core.regs[r2] + sext<16>(r3_imm), core.regs[r1]);
 
 - instruction: load
   decode: |
@@ -101,7 +101,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.regs[r1] = core.load<uint32_t>(core.regs[r2] + r3_imm);
+    core.regs[r1] = sext<32>(core.load<uint32_t>(core.regs[r2] + sext<16>(r3_imm)));
 
 - instruction: beq
   decode: |
@@ -109,7 +109,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: bne
   decode: |
@@ -117,7 +117,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: ble
   decode: |
@@ -125,7 +125,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: bgt
   decode: |
@@ -133,7 +133,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.pc_reg += (asSigned(core.regs[r1]) > asSigned(core.regs[r2])) ? sext<16>(r3_imm) * 4 : 4;
 
 - instruction: bleu
   decode: |
@@ -141,7 +141,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: bgtu
   decode: |
@@ -149,7 +149,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: shl
   decode: |
@@ -157,7 +157,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.regs[r1] = core.regs[r2] << r3_imm;
+    core.regs[r1] = sext<32>(core.regs[r2] << r3_imm);
 
 - instruction: sra
   decode: |
@@ -165,7 +165,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: shr
   decode: |
@@ -173,7 +173,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: xor
   decode: |
@@ -181,7 +181,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    assert(0);
 
 - instruction: sub
   decode: |
