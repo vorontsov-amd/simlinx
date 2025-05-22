@@ -10,16 +10,13 @@ execute_cc_tmpl = Template("""
 
   namespace ISA {
     using reg_t = uint64_t;
-    #define rs1 ((curI->rs1))
-    #define rs2 ((curI->rs2))
-    #define rd ((curI->rd))
-    #define csr ((curI->csr))
-    #define imm ((curI->imm))
+    #define r1     ((curI->rs1))
+    #define r2     ((curI->rs2))
+    #define r3_imm ((curI->imm))
 
     {% for instruction in implInstrSet %}
     void execute{{ instruction.instruction }}(simlinx::Core &core, BasedInstruction* bbsI, BasedInstruction* curI) {
       {#std::cout << __PRETTY_FUNCTION__ << std::endl;#}
-      core.regs[0] = 0;
       {% if instruction.updateCoreState %} 
         core.pc_reg += (curI-bbsI)*sizeof(uint32_t); 
         core.executedI += (curI-bbsI+1); 
@@ -38,11 +35,9 @@ execute_cc_tmpl = Template("""
       core.pc_reg += (curI-bbsI)*sizeof(uint32_t);
       core.executedI += (curI-bbsI);
     }
-    #undef rs1
-    #undef rs2
-    #undef rd
-    #undef csr
-    #undef imm
+    #undef r1
+    #undef r2
+    #undef r3_imm
     }
 ///TODO: must be in instruction.hh or enum.gen.cc
 std::array<const char*, {{ implInstrSet|length + 2 }}> InstrNames = 
@@ -54,6 +49,7 @@ execute_hh_tmpl = Template("""
   #include "cpu/fault.hh"
   #include "cpu/instruction.hh"
   #include "syscall/syscall.gen.hh"
+  #include "sdl/sdl.h"
   #include "cpu/enum.gen.hh"
   namespace ISA {
     {% for instruction in implInstrSet %}

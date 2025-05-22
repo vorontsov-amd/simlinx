@@ -4,7 +4,11 @@
 find_package(LIEF REQUIRED COMPONENTS STATIC) # COMPONENTS: <SHARED | STATIC> - Default: STATIC
 # add_subdirectory(${PROJECT_SOURCE_DIR}/xbyak ${CMAKE_CURRENT_BINARY_DIR}/xbyak)
 
+find_package(SDL2 REQUIRED)
+include_directories(${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
+
 list(APPEND SOURCES main.cc)
 add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE LIEF::LIEF)
 # target_link_libraries(${PROJECT_NAME} PRIVATE xbyak)

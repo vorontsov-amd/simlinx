@@ -12,7 +12,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = r3_imm;
 
 - instruction: flush
   decode: |
@@ -20,7 +20,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    simFlush();
 
 - instruction: putpixel
   decode: |
@@ -28,7 +28,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    simPutPixel(r1, r2, r3_imm);
 
 - instruction: b
   decode: |
@@ -36,7 +36,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.pc_reg = r3_imm;
 
 - instruction: movhi
   decode: |
@@ -44,7 +44,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = r3_imm << 16;
 
 - instruction: ori
   decode: |
@@ -52,7 +52,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = core.regs[r2] | r3_imm;
 
 - instruction: inc_eqi
   decode: |
@@ -77,7 +77,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = core.regs[r2] + core.regs[r3_imm];
 
 - instruction: mul
   decode: |
@@ -93,7 +93,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.store<uint32_t>(core.regs[r2] + r3_imm, core.regs[r1]);
 
 - instruction: load
   decode: |
@@ -101,7 +101,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = core.load<uint32_t>(core.regs[r2] + r3_imm);
 
 - instruction: beq
   decode: |
@@ -157,7 +157,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = core.regs[r2] << r3_imm;
 
 - instruction: sra
   decode: |
@@ -189,7 +189,7 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    core.regs[r1] = core.regs[r2] - core.regs[r3_imm];
 
 - instruction: clear
   decode: |
@@ -197,4 +197,4 @@
     useR2;
     useR3_IMM;
   execute: |
-    //
+    simClearWindow();

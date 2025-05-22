@@ -1,4 +1,5 @@
 #include "cpu/cpu.hh"
+#include "sdl/sdl.h"
 #include <LIEF/ELF.hpp>
 #include <exception>
 #include <iostream>
@@ -11,6 +12,8 @@ int main(int argc, char const *argv[]) try {
   }
 
   auto binary = LIEF::ELF::Parser::parse(argv[1]);
+
+  simInit();
 
   simlinx::CPU cpu{3_GB};
   for (auto &&S : binary->sections()) {
