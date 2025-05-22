@@ -1,22 +1,12 @@
-- name: write
-  args: [fd, buf, count]
-  do: |
-    char* buf = (char*) core.regs[simlinx::Register::a1];
-    uint64_t count = (uint64_t) core.regs[simlinx::Register::a2];
-    for (unsigned i = 0; i < count; i++) {
-      putchar(buf[i]);
-    }
-    putchar('\n');
-
 - name: exit
   args: []
   do: |
-    if (core.regs[simlinx::Register::a0])
+    if (core.regs[simlinx::Register::r0])
       // red
-      printf("sys_exit [ \033[31m %ld \033[0m ]\n", core.regs[simlinx::Register::a0]);
+      printf("sys_exit [ \033[31m %ld \033[0m ]\n", core.regs[simlinx::Register::r0]);
     else
       // green
-      printf("sys_exit [ \033[32m %ld \033[0m ]\n", core.regs[Core::Register::a0]);
+      printf("sys_exit [ \033[32m %ld \033[0m ]\n", core.regs[Core::Register::r0]);
     return Fault::TheEndOfTask;
 
 - name: not_implemented_syscall

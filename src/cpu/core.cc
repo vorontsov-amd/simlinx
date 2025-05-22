@@ -44,7 +44,7 @@ namespace simlinx {
     }
 
     if ((fault != Fault::NoFault || this->fault != Fault::NoFault) &&
-        regs[Core::Register::a0])
-      exit(regs[Core::Register::a0]);
+        regs[Core::Register::r0])
+      exit(regs[Core::Register::r0]);
   }
 } // namespace simlinx

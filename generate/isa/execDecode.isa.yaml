@@ -77,7 +77,10 @@
     useR2;
     useR3_IMM;
   execute: |
-    core.regs[r1] = core.regs[r2] + core.regs[r3_imm];
+    if (r3_imm < core.regs.size())
+      core.regs[r1] = core.regs[r2] + core.regs[r3_imm];
+    else
+      core.regs[r1] = core.regs[r2] + sext<16>(r3_imm);
 
 - instruction: mul
   decode: |

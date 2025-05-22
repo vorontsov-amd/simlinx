@@ -5,6 +5,7 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
+#include <stdio.h>
 
 static SDL_Renderer *Renderer = NULL;
 static SDL_Window *Window = NULL;
@@ -55,10 +56,15 @@ void simPutPixel(int x, int y, int argb)
 {
     assert(0 <= x && x < WINDOW_WIDTH && "x is out of bounds");
     assert(0 <= y && y < WINDOW_HEIGHT && "y is out of bounds");
+
     Uint8 a = argb >> 24;
     Uint8 r = (argb >> 16) & 0xFF;
     Uint8 g = (argb >> 8) & 0xFF;
     Uint8 b = argb & 0xFF;
+
+    // static int i = 0;
+    // if (i++ % 100 == 0)
+    //     printf("%x\n", argb);
 
     SDL_SetRenderDrawColor(Renderer, r, g, b, a);
     SDL_RenderDrawPoint(Renderer, x, y);
