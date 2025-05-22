@@ -66,36 +66,36 @@ execute_hh_tmpl = Template("""
 """)
 
 enum_hh_tmpl = Template("""
-#pragma once
-#include <array>
-enum InstrId {
-{% for instruction in implInstrSet %}{{ instruction.instruction.upper() }} = {{ loop.index0 }},
-{% endfor %} EBBC, //basic block end canary
-NONE
-};
+  #pragma once
+  #include <array>
+  enum InstrId {
+  {% for instruction in implInstrSet %}{{ instruction.instruction.upper() }} = {{ loop.index0 }},
+  {% endfor %} EBBC, //basic block end canary
+  NONE
+  };
 
-extern std::array<const char *, {{ implInstrSet|length + 2 }}> InstrNames;                
+  extern std::array<const char *, {{ implInstrSet|length + 2 }}> InstrNames;                
 """)
 
 
 decoder_block_tmpl = Template(
-"""{{' '*tab}}decodedInstr.matchBitsId(decodedBits, InstrId::{{ instr_id }});
-// assignements
-{{' '*tab}}{{ decode | indent(tab)}} // end assignments
+  """{{' '*tab}}decodedInstr.matchBitsId(decodedBits, InstrId::{{ instr_id }});
+  // assignements
+  {{' '*tab}}{{ decode | indent(tab)}} // end assignments
 
-// metainformation
-setExec({{'execute'+instr_id[0].upper()+instr_id[1:].lower()}});
-{% if isEBB %} decodedInstr.setEBB();{% endif %} //end metainformation
+  // metainformation
+  setExec({{'execute'+instr_id[0].upper()+instr_id[1:].lower()}});
+  {% if isEBB %} decodedInstr.setEBB();{% endif %} //end metainformation
 
 """)
 
 bitfields_hh_tmpl = Template("""
-#pragma once
-{% for field in fields %}
-#define {{ field[0].upper() + ' '*(13 - field[0] | length) }} bitsFrom(decodedBits,{{ "%4s" | format(field[1]) }},{{ "%4s" | format(field[2]) }}){% endfor %}
+  #pragma once
+  {% for field in fields %}
+  #define {{ field[0].upper() + ' '*(13 - field[0] | length) }} bitsFrom(decodedBits,{{ "%4s" | format(field[1]) }},{{ "%4s" | format(field[2]) }}){% endfor %}
 """)
 
 undef_bitfields_tmpl = Template("""
-{% for field in fields %}
-#undef {{ field[0].upper() }}{% endfor %}
+  {% for field in fields %}
+  #undef {{ field[0].upper() }}{% endfor %}
 """)

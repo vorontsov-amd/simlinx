@@ -6,16 +6,14 @@ import isaTemplateHandler as tmph
 from autoClangFormat import make_clang_format
 
 decoder_tree_header = """
-#define assign(left, right) decodedInstr.left = right ;
+    #define assign(left, right) decodedInstr.left = right ;
+    #define useR1 assign(rs1, R1)
+    #define useR2 assign(rs2, R2)
+    #define useR3_IMM assign(imm, R3_IMM)
+    #define setExec(_set_exec_func) assign(exec, _set_exec_func)
 
-#define useR1 assign(rs1, R1)
-#define useR2 assign(rs2, R2)
-#define useR3_IMM assign(imm, R3_IMM)
-
-#define setExec(_set_exec_func) assign(exec, _set_exec_func)
-
-using ISA::bitsFrom;
-void simlinx::Core::decode(uint32_t decodedBits, ISA::BasedInstruction& decodedInstr) {
+    using ISA::bitsFrom;
+    void simlinx::Core::decode(uint32_t decodedBits, ISA::BasedInstruction& decodedInstr) {
 """
 
 class Generator:
@@ -38,7 +36,7 @@ class Generator:
         self.impl_instr = self.handler.get_impl_names()
 
 
-    def get_token(self, who:str='noone')->str:
+    def get_token(self, who:str='noone') -> str:
         token = self.txt[self.pointer] if self.pointer < len(self.txt) else None
         self.pointer += 1
         return token
@@ -72,7 +70,7 @@ class Generator:
                     else:
                         switch_arg = f'(bitsFrom(decodedBits, {token[0]}, {token[0]}))'
 
-                out_line = ' '*self.gap + f'switch({switch_arg}) {{\n'
+                out_line = ' ' * self.gap + f'switch({switch_arg}) {{\n'
 
                 self.gap += self.tab
                 case = self.case()
@@ -82,8 +80,8 @@ class Generator:
                     self.gap -= self.tab
                     if case:
                         out_line += case
-                        out_line += ' '*(self.gap+self.tab) + 'default: {decodedInstr.matchBitsId(decodedBits, InstrId::NONE);}\n'
-                        out_line += ' '*self.gap + f'}}\n'
+                        out_line += ' ' * (self.gap+self.tab) + 'default: {decodedInstr.matchBitsId(decodedBits, InstrId::NONE);}\n'
+                        out_line += ' ' * self.gap + f'}}\n'
                     else:
                         out_line = ''
                 return (True, out_line)
@@ -106,14 +104,14 @@ class Generator:
                 if not decode[0]:
                     id = self.ID()
                     if id:
-                        out_line += ' '*self.gap + f'case 0{token}: {{\n'\
-                                    + id\
-                                    + ' '*(self.gap+self.tab) + f'break;\n' + ' '*self.gap + '}\n'
+                        out_line += ' ' * self.gap + f'case 0{token}: {{\n' \
+                                 + id \
+                                 + ' ' * (self.gap+self.tab) + f'break;\n' + ' ' * self.gap + '}\n'
                 else:
                     if decode[1]:
-                        out_line += ' '*self.gap + f'case 0{token}: {{\n'\
-                                    + decode[1]\
-                                    + ' '*(self.gap+self.tab) + f'break;\n' + ' '*self.gap + '}\n'
+                        out_line += ' ' * self.gap + f'case 0{token}: {{\n' \
+                                 + decode[1] \
+                                 + ' ' * (self.gap+self.tab) + f'break;\n' + ' ' * self.gap + '}\n'
             else:
                 self.return_token()
                 break
@@ -121,7 +119,7 @@ class Generator:
 
 
     def make_decode_tree(self)->None:
-        with open(self.cpuDirCC+'decodeTree.gen.cc', 'w', encoding='utf-8') as f:
+        with open(self.cpuDirCC + 'decodeTree.gen.cc', 'w', encoding='utf-8') as f:
             f.write(self.make_header('decodeTree', 'cpu'))
             f.write(self.make_header('bitfields', 'cpu'))
             f.write(decoder_tree_header + self.out + '}\n')

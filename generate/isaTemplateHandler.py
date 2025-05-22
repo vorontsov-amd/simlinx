@@ -121,6 +121,6 @@ class YamlHandler:
 
 if __name__ == '__main__':
     handler = YamlHandler()
-    handler.get_impl_set(['generate/isa/execDecodeRvZicsr.isa.yaml'])
+    handler.get_impl_set([])
     handler.get_impl_names()
     handler.print_warning()
